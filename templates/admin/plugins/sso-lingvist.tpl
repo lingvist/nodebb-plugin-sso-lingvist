@@ -18,7 +18,7 @@
 						<input type="text" id="authorization_url" name="authorization_url" title="OAuth Authorization URL" class="form-control" placeholder="OAuth Authorization URL">
 					</div>
 					<div class="form-group">
-						<label for="token_url">Authorization URL</label>
+						<label for="token_url">Token URL</label>
 						<input type="text" id="token_url" name="token_url" title="OAuth Token URL" class="form-control" placeholder="OAuth Token URL">
 					</div>
 
