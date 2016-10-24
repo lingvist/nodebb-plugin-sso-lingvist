@@ -10,7 +10,7 @@
 					</div>
 					<div class="form-group">
 						<label for="secret">OAuth Password</label>
-						<input type="text" id="secret" name="secret" title="OAuth Password" class="form-control" placeholder="OAuth Password">
+						<input type="password" id="secret" name="secret" title="OAuth Password" class="form-control" placeholder="OAuth Password" autocomplete="off">
 					</div>
 
 					<div class="form-group">
