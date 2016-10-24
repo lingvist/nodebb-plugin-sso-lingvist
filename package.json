@@ -1,7 +1,7 @@
 {
   "name": "nodebb-plugin-sso-lingvist",
   "version": "0.3.1",
-  "description": "NodeBB Generic OAuth SSO",
+  "description": "NodeBB Lingvist OAuth SSO",
   "main": "library.js",
   "repository": {
     "type": "git",
@@ -28,7 +28,8 @@
   "readme": "",
   "readmeFilename": "README.md",
   "dependencies": {
-    "passport-oauth": "~1.0.0"
+    "passport-oauth": "~1.0.0",
+    "jws": "^3.1.3"
   },
   "nbbpm": {
     "compatibility": "^1.0.1",
