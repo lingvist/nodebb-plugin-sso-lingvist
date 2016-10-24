@@ -1,17 +1,13 @@
-# NodeBB OAuth SSO
+# NodeBB Lingvist SSO
 
-NodeBB Plugin that allows users to login/register via any configured OAuth provider. **Please note** that this is not a complete plugin, but merely a skeleton with which you can create your own OAuth SSO plugin for NodeBB (and hopefully share it with others!)
-
-## How to Adapt
-
-1. Fork this plugin
-    * ![](http://i.imgur.com/APWHJsa.png)
-1. Add the OAuth credentials (around line 30 of `library.js`)
-1. Update profile information (around line 137 of `library.js`) with information from the user API call
-1. Activate this plugin from the plugins page
-1. Restart your NodeBB
-1. Let NodeBB take care of the rest
-
-## Trouble?
-
-Find us on [the community forums](http://community.nodebb.org)!
+1. Include into your NodeBB's `package.json` as dependency
+1. Install NodeBB
+1. Activate `nodebb-plugin-sso-lingvist` via admin UI
+1. Restart forum
+1. Fill in Lingvist OAuth2 form from Admin -> Social Authentication -> lingvist
+    1. OAuth ID - your OAuth client id pre-agreed with Lingvist OAuth provider
+    1. OAuth Password - your OAuth client password pre-agreed with Lingvist OAuth provider
+    1. Authorization URL - https://learn.lingvist.com/#sso
+    1. Token URL - https://api.lingvist.com/oauth2/token
+1. Restart forum
+1. Login/SignUp via Alternative Logins
