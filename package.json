@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-sso-lingvist",
-  "version": "0.3.1",
+  "version": "0.1.0",
   "description": "NodeBB Lingvist OAuth SSO",
   "main": "library.js",
   "repository": {
@@ -32,7 +32,6 @@
     "jws": "^3.1.3"
   },
   "nbbpm": {
-    "compatibility": "^1.0.1",
-    "index": false
+    "compatibility": "^1.0.1"
   }
 }
