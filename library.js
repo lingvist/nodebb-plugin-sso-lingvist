@@ -12,7 +12,7 @@
         path = module.parent.require('path'),
         nconf = module.parent.require('nconf'),
         winston = module.parent.require('winston'),
-        jws = module.parent.require('jws'),
+        jws = module.require('jws'),
         async = module.parent.require('async');
 
     var authenticationController = module.parent.require('./controllers/authentication');
