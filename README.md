@@ -1,5 +1,7 @@
 # NodeBB Lingvist SSO
 
+Plugin for [NodeBB](https://nodebb.org/) forum to allow [Lingvist](https://lingvist.com/) users to log in the [Lingvist forum](https://forum.lingvist.com/) with their [Lingvist](https://lingvist.com/) credentials.
+
 1. Include into your NodeBB's `package.json` as dependency
 1. Install NodeBB
 1. Activate `nodebb-plugin-sso-lingvist` via admin UI
