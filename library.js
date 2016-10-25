@@ -1,34 +1,31 @@
 (function (module) {
     "use strict";
-    var InternalOAuthError = module.require('passport-oauth').InternalOAuthError;
-
-    var User = module.parent.require('./user'),
+    var InternalOAuthError = module.require('passport-oauth').InternalOAuthError,
+        User = module.parent.require('./user'),
         Groups = module.parent.require('./groups'),
         utils = module.parent.require('../public/src/utils'),
         meta = module.parent.require('./meta'),
         db = module.parent.require('../src/database'),
         passport = module.parent.require('passport'),
-        fs = module.parent.require('fs'),
-        path = module.parent.require('path'),
         nconf = module.parent.require('nconf'),
         winston = module.parent.require('winston'),
         jws = module.require('jws'),
-        async = module.parent.require('async');
-
-    var authenticationController = module.parent.require('./controllers/authentication');
-
-    var constants = Object.freeze({
+        async = module.parent.require('async'),
+        authenticationController = module.parent.require('./controllers/authentication'),
+        PassportOAuth = require('passport-oauth').OAuth2Strategy,
+        constants = Object.freeze({
             admin: {
                 route: '/plugins/sso-lingvist',
                 icon: 'icon-lingvist'
             },
 
-            name: 'lingvist'	// Something unique to your OAuth provider in lowercase, like "github", or "nodebb"
+            name: 'lingvist' // Something unique to your OAuth provider in lowercase, like "github", or "nodebb"
         }),
-        OAuth = {}, passportOAuth, opts;
+        OAuth = {},
+        opts;
 
     OAuth.init = function (data, callback) {
-        function render(req, res, next) {
+        function render(req, res) {
             res.render('admin/plugins/sso-lingvist', {});
         }
 
@@ -43,8 +40,6 @@
         meta.settings.get('sso-lingvist', function (err, settings) {
             if (!err && settings.id && settings.secret && settings.token_url && settings.authorization_url) {
 
-                passportOAuth = require('passport-oauth')['OAuth2Strategy'];
-
                 // OAuth 2 options
                 opts = {};
                 opts.clientID = settings.id;
@@ -53,17 +48,20 @@
                 opts.tokenURL = settings.token_url;
                 opts.callbackURL = nconf.get('url') + '/auth/' + constants.name + '/callback';
 
-                passportOAuth.Strategy.prototype.userProfile = function (accessToken, done) {
-                    var decoded = jws.decode(accessToken);
+                PassportOAuth.Strategy.prototype.userProfile = function (accessToken, done) {
+                    var decoded = jws.decode(accessToken),
+                        jsonPayload;
 
                     if (decoded === null || decoded.payload === undefined) {
                         return done(new InternalOAuthError('Do not understand token content'));
                     }
 
                     try {
-                        var json = decoded.payload;
-                        OAuth.parseUserReturn(json, function (err, profile) {
-                            if (err) return done(err);
+                        jsonPayload = decoded.payload;
+                        OAuth.parseUserReturn(jsonPayload, function (err, profile) {
+                            if (err) {
+                                return done(err);
+                            }
                             profile.provider = constants.name;
 
                             done(null, profile);
@@ -75,7 +73,7 @@
 
                 opts.passReqToCallback = true;
 
-                passport.use(constants.name, new passportOAuth(opts, function (req, token, secret, profile, done) {
+                passport.use(constants.name, new PassportOAuth(opts, function (req, token, secret, profile, done) {
                     OAuth.login({
                         oAuthid: profile.id,
                         handle: profile.displayName,
@@ -142,7 +140,7 @@
                     db.setObjectField(constants.name + 'Id:uid', payload.oAuthid, uid);
 
                     if (payload.isAdmin) {
-                        Groups.join('administrators', uid, function (err) {
+                        Groups.join('administrators', uid, function () {
                             callback(null, {
                                 uid: uid
                             });

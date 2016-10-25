@@ -1,20 +1,20 @@
 {
-	"id": "nodebb-plugin-sso-lingvist",
-	"name": "NodeBB Lingvist SSO",
-	"description": "NodeBB Plugin that allows users to login/register via any Lingvist OAuth provider.",
-	"url": "https://github.com/lingvist/nodebb-plugin-sso-lingvist",
-	"library": "./library.js",
-	"templates": "templates",
-	"staticDirs": {
-		"images": "public/images"
-	},
-	"less": [
-		"./public/less/style.less"
-	],
-	"hooks": [
-		{ "hook": "static:app.load", "method": "init" },
-		{ "hook": "filter:auth.init", "method": "getStrategy" },
-		{ "hook": "filter:admin.header.build", "method": "addMenuItem" },
-		{ "hook": "filter:user.delete", "method": "deleteUserData" }
-	]
+    "id": "nodebb-plugin-sso-lingvist",
+    "name": "NodeBB Lingvist SSO",
+    "description": "NodeBB Plugin that allows users to login/register via any Lingvist OAuth provider.",
+    "url": "https://github.com/lingvist/nodebb-plugin-sso-lingvist",
+    "library": "./library.js",
+    "templates": "templates",
+    "staticDirs": {
+        "images": "public/images"
+    },
+    "less": [
+        "./public/less/style.less"
+    ],
+    "hooks": [
+        { "hook": "static:app.load", "method": "init" },
+        { "hook": "filter:auth.init", "method": "getStrategy" },
+        { "hook": "filter:admin.header.build", "method": "addMenuItem" },
+        { "hook": "filter:user.delete", "method": "deleteUserData" }
+    ]
 }
