@@ -96,11 +96,9 @@
                     icon: constants.admin.icon,
                     scope: (constants.scope || '').split(',')
                 });
-
-                callback(null, strategies);
-            } else {
-                callback(new Error('OAuth Configuration is invalid'));
             }
+
+            callback(null, strategies);
         });
     };
 
