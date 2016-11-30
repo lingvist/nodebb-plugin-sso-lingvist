@@ -109,6 +109,14 @@
         profile.displayName = data.displayName;
         profile.emails = [{value: data.email}];
 
+        if (profile.displayName === null) {
+            try {
+                profile.displayName = data.email.match(/(.*)@/)[1];
+            } catch (error) {
+                profile.displayName = 'Din\'t have an -at- in the email';
+            }
+        }
+
         if (!utils.isUserNameValid(profile.displayName)) {
             profile.displayName = utils.slugify(profile.displayName, true);
         }
