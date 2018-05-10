@@ -21,6 +21,10 @@
 						<label for="token_url">Token URL</label>
 						<input type="text" id="token_url" name="token_url" title="OAuth Token URL" class="form-control" placeholder="OAuth Token URL">
 					</div>
+					<div class="form-group">
+						<label for="profile_url">Profile URL</label>
+						<input type="text" id="profile_url" name="profile_url" title="OAuth User's profile URL" class="form-control" placeholder="OAuth Profile URL">
+					</div>
 
 					<p class="help-block">
 						The appropriate "Redirect URI" is your NodeBB's URL with `/auth/lingvist/callback` appended to it.

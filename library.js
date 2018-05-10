@@ -19,7 +19,8 @@
                 icon: 'icon-lingvist'
             },
 
-            name: 'lingvist' // Something unique to your OAuth provider in lowercase, like "github", or "nodebb"
+            name: 'lingvist', // Something unique to your OAuth provider in lowercase, like "github", or "nodebb"
+            scope: 'auth'
         }),
         OAuth = {},
         opts;
@@ -38,7 +39,8 @@
     OAuth.getStrategy = function (strategies, callback) {
 
         meta.settings.get('sso-lingvist', function (err, settings) {
-            if (!err && settings.id && settings.secret && settings.token_url && settings.authorization_url) {
+            if (!err && settings.id && settings.secret && settings.token_url && settings.profile_url
+                && settings.authorization_url) {
 
                 // OAuth 2 options
                 opts = {};
@@ -46,9 +48,12 @@
                 opts.clientSecret = settings.secret;
                 opts.authorizationURL = settings.authorization_url;
                 opts.tokenURL = settings.token_url;
+                opts.profileURL = settings.profile_url;
                 opts.callbackURL = nconf.get('url') + '/auth/' + constants.name + '/callback';
 
-                PassportOAuth.Strategy.prototype.userProfile = function (accessToken, done) {
+
+                passportOAuth.Strategy.prototype.userProfile = function (accessToken, done) {
+
                     var decoded = jws.decode(accessToken),
                         jsonPayload;
 
@@ -56,18 +61,46 @@
                         return done(new InternalOAuthError('Do not understand token content'));
                     }
 
-                    try {
-                        jsonPayload = decoded.payload;
-                        OAuth.parseUserReturn(jsonPayload, function (err, profile) {
+                    // New format
+                    if (decoded.payload.email === undefined) {
+
+                        this._oauth2.get(opts.profileURL, accessToken, function (err, body, res) {
                             if (err) {
                                 return done(err);
                             }
-                            profile.provider = constants.name;
 
-                            done(null, profile);
+                            try {
+                                var jsonPayload = JSON.parse(body);
+
+                                OAuth.parseUserReturn(jsonPayload, function (err, profile) {
+                                    if (err) {
+                                        return done(err);
+                                    }
+                                    profile.provider = constants.name;
+
+                                    done(null, profile);
+                                });
+                            } catch (e) {
+                                done(e);
+                            }
                         });
-                    } catch (e) {
-                        done(e);
+
+                    // Old format
+                    } else {
+                        try {
+                            jsonPayload = decoded.payload;
+
+                            OAuth.parseUserReturn(jsonPayload, function (err, profile) {
+                                if (err) {
+                                    return done(err);
+                                }
+                                profile.provider = constants.name;
+
+                                done(null, profile);
+                            });
+                        } catch (e) {
+                            done(e);
+                        }
                     }
                 };
 
@@ -106,7 +139,7 @@
 
         var profile = {};
         profile.id = data.id;
-        profile.displayName = data.displayName;
+        profile.displayName = data.displayName || data.name;
         profile.emails = [{value: data.email}];
 
         if (profile.displayName === null) {
