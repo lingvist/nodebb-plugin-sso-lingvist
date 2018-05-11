@@ -52,7 +52,7 @@
                 opts.callbackURL = nconf.get('url') + '/auth/' + constants.name + '/callback';
 
 
-                passportOAuth.Strategy.prototype.userProfile = function (accessToken, done) {
+                PassportOAuth.Strategy.prototype.userProfile = function (accessToken, done) {
 
                     var decoded = jws.decode(accessToken),
                         jsonPayload;
