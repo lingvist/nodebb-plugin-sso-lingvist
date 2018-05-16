@@ -13,6 +13,7 @@
         async = module.parent.require('async'),
         authenticationController = module.parent.require('./controllers/authentication'),
         PassportOAuth = require('passport-oauth').OAuth2Strategy,
+        request = require('request'),
         constants = Object.freeze({
             admin: {
                 route: '/plugins/sso-lingvist',
@@ -64,9 +65,13 @@
                     // New format
                     if (decoded.payload.email === undefined) {
 
-                        this._oauth2.get(opts.profileURL, accessToken, function (err, body, res) {
+                        request.get({url: opts.profileURL, auth: {bearer: accessToken}}, function (err, res, body) {
                             if (err) {
                                 return done(err);
+                            }
+
+                            if (200 !== res.statusCode) {
+                                return done(new InternalOAuthError('Unable to acquire profile data'))
                             }
 
                             try {
