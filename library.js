@@ -77,7 +77,7 @@
                             try {
                                 var jsonPayload = JSON.parse(body);
 
-                                OAuth.parseUserReturn(jsonPayload, function (err, profile) {
+                                OAuth.parseUserReturn(jsonPayload.profile, function (err, profile) {
                                     if (err) {
                                         return done(err);
                                     }
