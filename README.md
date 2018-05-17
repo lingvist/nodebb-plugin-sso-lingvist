@@ -11,5 +11,6 @@ Plugin for [NodeBB](https://nodebb.org/) forum to allow [Lingvist](https://lingv
     1. OAuth Password - your OAuth client password pre-agreed with Lingvist OAuth provider
     1. Authorization URL - https://learn.lingvist.com/#sso
     1. Token URL - https://api.lingvist.com/oauth2/token
+    1. Profile URL - https://api.lingvist.com/1.0/user/profile
 1. Restart forum
 1. Login/SignUp via Alternative Logins
