@@ -143,7 +143,7 @@
     OAuth.parseUserReturn = function (data, callback) {
 
         var profile = {};
-        profile.id = data.id;
+        profile.id = data.id || data.uuid;
         profile.displayName = data.displayName || data.name;
         profile.emails = [{value: data.email}];
 
